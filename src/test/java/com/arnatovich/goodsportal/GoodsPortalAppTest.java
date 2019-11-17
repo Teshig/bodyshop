@@ -17,7 +17,7 @@ public class GoodsPortalAppTest {
   
   /**
    * Even empty method shows, that app context can be loaded successfully
-   * */
+   */
   @Test
   public void contextLoads(){}
 
