@@ -13,6 +13,7 @@
     <div class="grid">
       <div class="ingredient-group" id="wraps">
         <h3>Choose you ingredients:</h3>
+        <span class="validationErrors" th:if="${#fields.hasErrors('ingredients')}" th:errors="*{ingredients}">At least one option should be chosen</span>
         <div th:each="ingredient : ${ingredients}">
           <input name="ingredients" type="checkbox" th:value="${ingredient.id}"/>
           <span th:text="${ingredient.name}">INGREDIENT</span>

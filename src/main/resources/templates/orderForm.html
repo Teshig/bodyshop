@@ -36,18 +36,22 @@
 
     <label for="zipCode">Zip code:</label>
     <input id="zipCode" type="text" th:field="*{zip}">
+    <span class="validationErrors" th:if="${#fields.hasErrors('zip')}" th:errors="*{zip}">validation error</span>
     <br />
 
     <label for="ccNumber">Credit Card:</label>
     <input id="ccNumber" type="text" th:field="*{ccNumber}">
+    <span class="validationErrors" th:if="${#fields.hasErrors('ccNumber')}" th:errors="*{ccNumber}">validation error</span>
     <br />
 
     <label for="ccExpiration">Expiration:</label>
     <input id="ccExpiration" type="text" th:field="*{ccExpiration}">
+    <span class="validationErrors" th:if="${#fields.hasErrors('ccExpiration')}" th:errors="*{ccExpiration}">validation error</span>
     <br />
 
     <label for="ccCVV">CVV:</label>
     <input id="ccCVV" type="text" th:field="*{ccCVV}">
+    <span class="validationErrors" th:if="${#fields.hasErrors('ccCVV')}" th:errors="*{ccCVV}">validation error</span>
     <br />
 
     <input type="submit" value="Order!">
