@@ -18,17 +18,16 @@ import org.springframework.test.web.servlet.MockMvc;
  * It ensures registration of HomeController in Spring MVC and we can throw requests.
  */
 @RunWith(SpringRunner.class)
-@WebMvcTest(HomeController.class)
-public class HomeControllerTest {
+@WebMvcTest(OrderController.class)
+public class OrderControllerTest {
   
   @Autowired
   private MockMvc mockMvc;
-  
+
   @Test
   public void testHomePage() throws Exception {
-    mockMvc.perform(get("/"))
+    mockMvc.perform(get("/orders/current"))
         .andExpect(status().isOk())
-        .andExpect(view().name("home"))
-        .andExpect(content().string(containsString("Hello little bro")));
+        .andExpect(view().name("orderForm"));
   }
 }
