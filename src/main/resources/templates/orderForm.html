@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>BodyShop</title>
+  <link rel="stylesheet" th:href="@{/styles.css}"/>
+</head>
+<body>
+  <!-- without th:action="@{/orders}" form would be sent to "/orders/current"-->
+  <form method="post" th:action="@{/orders}" th:object="${order}">
+    <h1>Order your Good</h1>
+    <a th:href="@{/design}" id="another">Create another Good</a>
+    <br />
+    
+    <div th:if="${#fields.hasErrors()}">
+      <span>Some problem with input occur</span>
+    </div>
+    
+    <h3>Delivery information:</h3>
+    
+    <label for="name">Name:</label>
+    <input id="name" type="text" th:field="*{name}">
+    <br />
+
+    <label for="street">Street:</label>
+    <input id="street" type="text" th:field="*{street}">
+    <br />
+
+    <label for="city">City:</label>
+    <input id="city" type="text" th:field="*{city}">
+    <br />
+
+    <label for="state">State:</label>
+    <input id="state" type="text" th:field="*{state}">
+    <br />
+
+    <label for="zipCode">Zip code:</label>
+    <input id="zipCode" type="text" th:field="*{zip}">
+    <br />
+
+    <label for="ccNumber">Credit Card:</label>
+    <input id="ccNumber" type="text" th:field="*{ccNumber}">
+    <br />
+
+    <label for="ccExpiration">Expiration:</label>
+    <input id="ccExpiration" type="text" th:field="*{ccExpiration}">
+    <br />
+
+    <label for="ccCVV">CVV:</label>
+    <input id="ccCVV" type="text" th:field="*{ccCVV}">
+    <br />
+
+    <input type="submit" value="Order!">
+  </form>
+</body>
+</html>
