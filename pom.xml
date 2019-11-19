@@ -25,6 +25,7 @@
   </properties>
 
   <dependencies>
+    <!-- used instead JSP for view -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-thymeleaf</artifactId>
@@ -33,6 +34,13 @@
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-web</artifactId>
     </dependency>
+    
+    <!-- Provide several options:
+         Automatic application restart when code changes
+         Automatic browser refresh when templates/css/js changes
+         Automatic disable of template caches
+         Build in H2 Console if the H2 DB is in use     
+     -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-devtools</artifactId>
@@ -55,6 +63,12 @@
       <groupId>org.seleniumhq.selenium</groupId>
       <artifactId>htmlunit-driver</artifactId>
       <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <optional>true</optional>
     </dependency>
   </dependencies>
   
