@@ -4,12 +4,17 @@ import lombok.Data;
 
 import org.hibernate.validator.constraints.CreditCardNumber;
 
+import java.util.Date;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
 @Data
 public class Order {
+  
+  private Long id;
+  
+  private Date createdAt;
   
   /**
    * Spring supports Java’s Bean Validation API (also known as JSR-303).

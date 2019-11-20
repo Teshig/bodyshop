@@ -4,6 +4,8 @@ package com.arnatovich.goodsportal;
 import lombok.extern.slf4j.Slf4j;
 
 import com.arnatovich.goodsportal.Ingredient.Type;
+import com.arnatovich.goodsportal.data.IngredientRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import javax.validation.Valid;
@@ -26,6 +29,13 @@ import javax.validation.Valid;
 @Controller
 @RequestMapping("/design")
 public class DesignGoodsController {
+  
+  private final IngredientRepository ingredientRepo;
+
+  @Autowired
+  public DesignGoodsController(IngredientRepository ingredientRepo) {
+    this.ingredientRepo = ingredientRepo;
+  }
 
   @GetMapping
   public String showDesignForm(Model model) {
@@ -38,13 +48,9 @@ public class DesignGoodsController {
   }
 
   private List<Ingredient> getIngredients() {
-    return Arrays.asList(
-          // INTELLECT, SKILL, ATTENTION, RESPONSIBILITY
-          new Ingredient("0", "intellect", Type.INTELLECT),
-          new Ingredient("1", "skill", Type.SKILL),
-          new Ingredient("2", "attention", Type.ATTENTION),
-          new Ingredient("3", "responsibility", Type.RESPONSIBILITY)
-      );
+    List<Ingredient> ingredients = new ArrayList<>();
+    ingredientRepo.findAll().forEach(element -> ingredients.add(element));
+    return ingredients;
   }
 
   /**
