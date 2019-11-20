@@ -3,7 +3,6 @@ package com.arnatovich.goodsportal;
 
 import lombok.extern.slf4j.Slf4j;
 
-import com.arnatovich.goodsportal.Ingredient.Type;
 import com.arnatovich.goodsportal.data.IngredientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import javax.validation.Valid;
 
@@ -42,14 +40,14 @@ public class DesignGoodsController {
     List<Ingredient> ingredients = getIngredients();
 
     model.addAttribute("ingredients", ingredients);
-    model.addAttribute("design", new Design());
+    model.addAttribute("design", new Good());
     
     return "design";
   }
 
   private List<Ingredient> getIngredients() {
     List<Ingredient> ingredients = new ArrayList<>();
-    ingredientRepo.findAll().forEach(element -> ingredients.add(element));
+    ingredientRepo.findAll().forEach(ingredients::add);
     return ingredients;
   }
 
@@ -61,7 +59,7 @@ public class DesignGoodsController {
    *  Any validation errors will be captured in an Errors.
    */
   @PostMapping
-  public String processDesign(@Valid Design design, Errors errors) {
+  public String processDesign(@Valid Good design, Errors errors) {
     log.info("Processing : " + design);
     
     return "redirect:/orders/current";
