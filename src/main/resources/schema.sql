@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS Ingredient (
 CREATE TABLE IF NOT EXISTS Good (
     id IDENTITY,
     name VARCHAR(50) NOT NULL,
-    createdAt VARCHAR(10) NOT NULL
+    createdAt VARCHAR(25) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS Good_Ingredients (
@@ -23,8 +23,8 @@ CREATE TABLE IF NOT EXISTS Good_Order (
     deliveryName VARCHAR(50) NOT NULL,
     deliveryStreet VARCHAR(50) NOT NULL,
     deliveryCity VARCHAR(50) NOT NULL,
-    deliveryState VARCHAR(2) NOT NULL,
-    deliveryZip VARCHAR(10) NOT NULL,
+    deliveryState VARCHAR(20) NOT NULL,
+    deliveryZip VARCHAR(20) NOT NULL,
     ccNumber VARCHAR(16) NOT NULL,
     ccExpiration VARCHAR(5) NOT NULL,
     ccCVV VARCHAR(3) NOT NULL,
