@@ -19,24 +19,24 @@
     <h3>Delivery information:</h3>
     
     <label for="name">Name:</label>
-    <input id="name" type="text" th:field="*{name}">
+    <input id="name" type="text" th:field="*{deliveryName}">
     <br />
 
     <label for="street">Street:</label>
-    <input id="street" type="text" th:field="*{street}">
+    <input id="street" type="text" th:field="*{deliveryStreet}">
     <br />
 
     <label for="city">City:</label>
-    <input id="city" type="text" th:field="*{city}">
+    <input id="city" type="text" th:field="*{deliveryCity}">
     <br />
 
     <label for="state">State:</label>
-    <input id="state" type="text" th:field="*{state}">
+    <input id="state" type="text" th:field="*{deliveryState}">
     <br />
 
     <label for="zipCode">Zip code:</label>
-    <input id="zipCode" type="text" th:field="*{zip}">
-    <span class="validationErrors" th:if="${#fields.hasErrors('zip')}" th:errors="*{zip}">validation error</span>
+    <input id="zipCode" type="text" th:field="*{deliveryZip}">
+    <span class="validationErrors" th:if="${#fields.hasErrors('deliveryZip')}" th:errors="*{deliveryZip}">validation error</span>
     <br />
 
     <label for="ccNumber">Credit Card:</label>
