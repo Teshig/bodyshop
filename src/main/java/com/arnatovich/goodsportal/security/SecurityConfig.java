@@ -1,34 +1,62 @@
 package com.arnatovich.goodsportal.security;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.StandardPasswordEncoder;
+
+import javax.sql.DataSource;
 
 @Configurable
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
   
+  @Autowired
+  DataSource dataSource;
+  
   /**
-   * The general format for a password is: {id}encodedPassword.
-   * That {id} is an identifier used to look up which PasswordEncoder should be used.
-   * there are next password encoders:
-   * - {bcrypt}$2a$10$dXJ3SW6G7P50lGmMkkmwe.20cQQubK3.HZWzG3YB1tlRy.fqvM/BG
-   * - {noop}password
-   * - {pbkdf2}5d923b44a6d129f3ddf3e3c8d29412723dcbde72445e8ef6bf3b508fbf17fa4ed4d6b99ca763d8dc
-   * - {scrypt}$e0801$8bWJaSu2IKSn9Z9kM+TPXfOc/9bdYSrN1oD9qfVThWEwdRTnO7re7Ei+fUZRJ68k9lTyuTeUp4of4g24hHnazw==$OAOec05+bXxvuu/1qZ6NUR+xQYvYv7BeL1QxwRpY5Pc=
-   * - {sha256}97cde38028ad898ebc02e690819fa220e88c62e0699403e94fff291cfffaf8410849f27605abcbc0
+   * By default would be enough just auth.jdbcAuthentication().dataSource(dataSource);
+   * But in that case Spring Security will be expecting certain tables in your DB, and 
+   * will perform next queries:
+   * 
+   * public static final String DEF_USERS_BY_USERNAME_QUERY =
+   *  "select username,password,enabled " +
+   *  "from users " +
+   *  "where username = ?";
+   * 
+   * public static final String DEF_AUTHORITIES_BY_USERNAME_QUERY =
+   *  "select username,authority " +
+   *  "from authorities " +
+   *  "where username = ?";
+   * 
+   * public static final String DEF_GROUP_AUTHORITIES_BY_USERNAME_QUERY =
+   *  "select g.id, g.group_name, ga.authority " +
+   *  "from groups g, group_members gm, group_authorities ga " +
+   *  "where gm.username = ? " +
+   *  "and g.id = ga.group_id " +
+   *  "and g.id = gm.group_id";
+   *  
+   *  ####################################################################################
+   *  
+   *  You could customize your requests, as shown below, but you should adhere to the basic 
+   *  contract of the queries:
+   *  - all queries take the username as their only parameter;
+   *  - the authentication query selects the username, password and enabled status;
+   *  - the authorities query selects zero or more rows containing the username and a granted authority;
+   *  - the group authorities query selects zero or more rows, each with a group ID, a group name and an authority;
    */
   @Override
   protected void configure(AuthenticationManagerBuilder auth) throws Exception {
     auth
-        .inMemoryAuthentication()
-          .withUser("Buzz")
-            .password("{noop}parol")
-            .authorities("ROLE_USER")
-          .and()
-          .withUser("Woody")
-            .password("{noop}parol")
-            .authorities("ROLE_USER");
+        .jdbcAuthentication()
+        .dataSource(dataSource)
+        .usersByUsernameQuery(
+            "SELECT username, password, enabled FROM Users WHERE username=?")
+        .authoritiesByUsernameQuery(
+            "SELECT username, authority FROM UserAuthorities WHERE username=?")
+        .passwordEncoder(new BCryptPasswordEncoder(4));
   }
 }
