@@ -93,6 +93,16 @@
       <artifactId>lombok</artifactId>
       <optional>true</optional>
     </dependency>
+    
+    <!-- Need in order avoid java.lang.ClassNotFoundException: org.bouncycastle.crypto.generators.SCrypt
+         during password encryption
+    -->
+    <dependency>
+      <groupId>org.bouncycastle</groupId>
+      <artifactId>bcpkix-jdk15on</artifactId>
+      <version>1.64</version>
+    </dependency>
+
   </dependencies>
   
   <build>

@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -34,5 +35,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     auth
         .userDetailsService(userDetailsService)
         .passwordEncoder(encoder());
+  }
+
+  /**
+   * The authorizeRequests() method returns an object ExpressionInterceptUrlRegistry on which you
+   * could specify URLs and patterns.
+   * The order of these rules is important! Security rules declared first take precedence over those
+   * declared lower down.
+   */
+  @Override
+  protected void configure(HttpSecurity http) throws Exception {
+    http.
+        authorizeRequests()
+        .antMatchers("/design", "/orders").hasRole("USER")
+        .antMatchers("/", "/**").permitAll()
+        .and().formLogin().loginPage("/login").defaultSuccessUrl("/design", true);
   }
 }
