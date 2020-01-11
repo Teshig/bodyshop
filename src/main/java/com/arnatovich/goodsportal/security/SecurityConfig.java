@@ -1,62 +1,55 @@
 package com.arnatovich.goodsportal.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.crypto.password.StandardPasswordEncoder;
+import org.springframework.security.crypto.scrypt.SCryptPasswordEncoder;
 
-import javax.sql.DataSource;
-
-@Configurable
-@EnableWebSecurity
+@Configuration
+@EnableWebSecurity(debug = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-  
+
+  @Qualifier("userRepositoryUserDetailsService")
   @Autowired
-  DataSource dataSource;
+  private UserDetailsService userDetailsService;
   
   /**
-   * By default would be enough just auth.jdbcAuthentication().dataSource(dataSource);
-   * But in that case Spring Security will be expecting certain tables in your DB, and 
-   * will perform next queries:
-   * 
-   * public static final String DEF_USERS_BY_USERNAME_QUERY =
-   *  "select username,password,enabled " +
-   *  "from users " +
-   *  "where username = ?";
-   * 
-   * public static final String DEF_AUTHORITIES_BY_USERNAME_QUERY =
-   *  "select username,authority " +
-   *  "from authorities " +
-   *  "where username = ?";
-   * 
-   * public static final String DEF_GROUP_AUTHORITIES_BY_USERNAME_QUERY =
-   *  "select g.id, g.group_name, ga.authority " +
-   *  "from groups g, group_members gm, group_authorities ga " +
-   *  "where gm.username = ? " +
-   *  "and g.id = ga.group_id " +
-   *  "and g.id = gm.group_id";
-   *  
-   *  ####################################################################################
-   *  
-   *  You could customize your requests, as shown below, but you should adhere to the basic 
-   *  contract of the queries:
-   *  - all queries take the username as their only parameter;
-   *  - the authentication query selects the username, password and enabled status;
-   *  - the authorities query selects zero or more rows containing the username and a granted authority;
-   *  - the group authorities query selects zero or more rows, each with a group ID, a group name and an authority;
+   * As it is annotated with @Bean any calls to encoder() will be intercepted to return the bean
+   * instance from the application context, not the original object.
    */
+  @Bean
+  public PasswordEncoder encoder() {
+    return new SCryptPasswordEncoder();
+  }
+  
   @Override
   protected void configure(AuthenticationManagerBuilder auth) throws Exception {
     auth
-        .jdbcAuthentication()
-        .dataSource(dataSource)
-        .usersByUsernameQuery(
-            "SELECT username, password, enabled FROM Users WHERE username=?")
-        .authoritiesByUsernameQuery(
-            "SELECT username, authority FROM UserAuthorities WHERE username=?")
-        .passwordEncoder(new BCryptPasswordEncoder(4));
+        .userDetailsService(userDetailsService)
+        .passwordEncoder(encoder());
+  }
+
+  /**
+   * The authorizeRequests() method returns an object ExpressionInterceptUrlRegistry on which you
+   * could specify URLs and patterns.
+   * The order of these rules is important! Security rules declared first take precedence over those
+   * declared lower down.
+   */
+  @Override
+  protected void configure(HttpSecurity http) throws Exception {
+    http.
+        authorizeRequests()
+        .antMatchers("/design", "/orders").hasRole("USER")
+        .antMatchers("/", "/**").permitAll()
+        .and().formLogin().loginPage("/login").defaultSuccessUrl("/design", true)
+        .and().logout().logoutSuccessUrl("/");
   }
 }
