@@ -49,6 +49,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         authorizeRequests()
         .antMatchers("/design", "/orders").hasRole("USER")
         .antMatchers("/", "/**").permitAll()
-        .and().formLogin().loginPage("/login").defaultSuccessUrl("/design", true);
+        .and().formLogin().loginPage("/login").defaultSuccessUrl("/design", true)
+        .and().logout().logoutSuccessUrl("/");
   }
 }

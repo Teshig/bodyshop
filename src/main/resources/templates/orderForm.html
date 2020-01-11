@@ -6,6 +6,9 @@
   <link rel="stylesheet" th:href="@{/styles.css}"/>
 </head>
 <body>
+<form method="POST" th:action="@{/logout}">
+  <input type="submit" value="Logout"/>
+</form>
   <!-- without th:action="@{/orders}" form would be sent to "/orders/current"-->
   <form method="post" th:action="@{/orders}" th:object="${order}">
     <h1>Order your Good</h1>
