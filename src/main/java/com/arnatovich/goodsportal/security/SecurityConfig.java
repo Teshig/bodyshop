@@ -14,7 +14,7 @@ import org.springframework.security.crypto.password.StandardPasswordEncoder;
 import org.springframework.security.crypto.scrypt.SCryptPasswordEncoder;
 
 @Configuration
-@EnableWebSecurity
+@EnableWebSecurity(debug = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
   @Qualifier("userRepositoryUserDetailsService")
