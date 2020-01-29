@@ -11,6 +11,8 @@
 </form>
   <!-- without th:action="@{/orders}" form would be sent to "/orders/current"-->
   <form method="post" th:action="@{/orders}" th:object="${order}">
+    <!-- explicit enabling CSRF support. But by default thymeleaf provides it via th:action="@{/orders} -->
+    <input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
     <h1>Order your Good</h1>
     <a th:href="@{/design}" id="another">Create another Good</a>
     <br />
