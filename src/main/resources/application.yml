@@ -4,4 +4,7 @@ logging:
   level: 
     root: warn
     org.springframework.security: info
+    
+greetings:
+  welcome: Hello my little bro from ${spring.application.name}
   
