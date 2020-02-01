@@ -1,0 +1,7 @@
+logging:
+  path: /var/logs/
+  file: Bodyshop.log
+  level: 
+    root: warn
+    org.springframework.security: info
+  
