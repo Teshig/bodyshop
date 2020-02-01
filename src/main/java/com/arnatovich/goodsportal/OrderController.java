@@ -4,6 +4,9 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.arnatovich.goodsportal.data.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,9 +25,12 @@ import javax.validation.Valid;
 @Controller
 @RequestMapping("/orders")
 @SessionAttributes("order")
+@ConfigurationProperties(prefix="bodyshop.orders")
 public class OrderController {
   
   private OrderRepository orderRepo;
+  
+  private int pageSize = 20;
 
   @Autowired
   public OrderController(OrderRepository orderRepo) {
@@ -52,5 +58,17 @@ public class OrderController {
     orderRepo.save(order);
     sessionStatus.setComplete();
     return "redirect:/";
+  }
+  
+  @GetMapping
+  public String ordersForUser(@AuthenticationPrincipal User user, Model model) {
+    Pageable pages = PageRequest.of(0, pageSize);
+    model.addAttribute("orders", orderRepo.findByUserOrderByPlacedAtDesc(user, pages));
+    
+    return "orderList";
+  }
+
+  public void setPageSize(int pageSize) {
+    this.pageSize = pageSize;
   }
 }

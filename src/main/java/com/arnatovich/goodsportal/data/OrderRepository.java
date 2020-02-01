@@ -1,6 +1,8 @@
 package com.arnatovich.goodsportal.data;
 
 import com.arnatovich.goodsportal.Order;
+import com.arnatovich.goodsportal.User;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
@@ -40,4 +42,6 @@ public interface OrderRepository extends CrudRepository<Order, Long> {
    */
   @Query("SELECT o FROM Order o WHERE o.deliveryCity='Seattle'")
   List<Order> readOrdersDeliveredInSeattle();
+
+  List<Order> findByUserOrderByPlacedAtDesc(User user, Pageable pages);
 }
