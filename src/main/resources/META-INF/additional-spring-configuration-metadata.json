@@ -1,0 +1,13 @@
+{
+  "properties": [
+    {
+      "name": "bodyshop.orders.pageSize",
+      "type": "java.lang.String",
+      "description": "Sets the maximum amount of orders for displaying."
+    },
+    {
+      "name": "greetings.welcome",
+      "type": "java.lang.String",
+      "description": "Just greeting for welcome page."
+    }
+  ] }

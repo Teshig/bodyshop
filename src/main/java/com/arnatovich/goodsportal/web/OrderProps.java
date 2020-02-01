@@ -3,6 +3,7 @@ package com.arnatovich.goodsportal.web;
 import lombok.Data;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
 
@@ -13,6 +14,7 @@ import javax.validation.constraints.Min;
 @ConfigurationProperties(prefix = "bodyshop.orders")
 @Data
 @Validated
+@EnableConfigurationProperties
 public class OrderProps {
   
   /**
