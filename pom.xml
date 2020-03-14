@@ -25,6 +25,13 @@
   </properties>
 
   <dependencies>
+
+    <!-- JMS support.  Apache ActiveMQ Artemis is more modern version then Apache ActiveMQ -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-artemis</artifactId>
+    </dependency>
+    
     <!-- used instead JSP for view -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
