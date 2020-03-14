@@ -3,11 +3,13 @@ package com.arnatovich.goodsportal;
 import com.arnatovich.goodsportal.data.GoodRepository;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.Optional;
 
@@ -23,16 +25,18 @@ import java.util.Optional;
 public class DesignGoodsControllerRest {
   
   private final GoodRepository goodRepo;
+  
+  private final RestTemplate restTemplate;
 
-  public DesignGoodsControllerRest(GoodRepository goodRepo) {
+  public DesignGoodsControllerRest(GoodRepository goodRepo, RestTemplate restTemplate) {
     this.goodRepo = goodRepo;
+    this.restTemplate = restTemplate;
   }
   
   @GetMapping("/recent")
-  public Iterable<Good> recentGoods() {
-    PageRequest page = PageRequest.of(
-        0, 12, Sort.by("createdAt").descending());
-    return goodRepo.findAll(page).getContent();
+  public Feature[] recentGoods() {
+    ResponseEntity<Feature[]> entity = restTemplate.getForEntity("http://localhost:8887/features/all", Feature[].class);
+    return entity.getBody();
   }
   
   @GetMapping("/{id}")
